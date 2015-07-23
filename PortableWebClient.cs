@@ -29,7 +29,10 @@ namespace Masterloop.Tools.Net
         public string DownloadString(string url)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.Credentials = new NetworkCredential(this.Username, this.Password);
+            if (this.Username != null && this.Password != null)
+            {
+                request.Credentials = new NetworkCredential(this.Username, this.Password);
+            }
             request.Accept = this.Accept;
             request.Method = "GET";
             HttpWebResponse response = (HttpWebResponse) GetResponse(request);
@@ -45,7 +48,10 @@ namespace Masterloop.Tools.Net
         public string UploadString(string url, string body)
         {
             HttpWebRequest request = WebRequest.CreateHttp(url);
-            request.Credentials = new NetworkCredential(this.Username, this.Password);
+            if (this.Username != null && this.Password != null)
+            {
+                request.Credentials = new NetworkCredential(this.Username, this.Password);
+            }
             request.Accept = this.Accept;
             request.Method = "POST";
             request.ContentType = this.ContentType;
@@ -67,24 +73,16 @@ namespace Masterloop.Tools.Net
         private WebResponse GetResponse(WebRequest request)
         {
             AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-
             IAsyncResult asyncResult = request.BeginGetResponse(r => autoResetEvent.Set(), null);
-
-            // Wait until the call is finished
             autoResetEvent.WaitOne();
-
             return request.EndGetResponse(asyncResult);
         }
 
         private Stream GetRequestStream(WebRequest request)
         {
             AutoResetEvent autoResetEvent = new AutoResetEvent(false);
-
             IAsyncResult asyncResult = request.BeginGetRequestStream(r => autoResetEvent.Set(), null);
-
-            // Wait until the call is finished
             autoResetEvent.WaitOne();
-
             return request.EndGetRequestStream(asyncResult);
         }
     }
