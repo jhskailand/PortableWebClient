@@ -28,7 +28,7 @@ namespace Masterloop.Tools.Net
 
         public string DownloadString(string url)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (this.Username != null && this.Password != null)
             {
                 request.Credentials = new NetworkCredential(this.Username, this.Password);
@@ -47,7 +47,7 @@ namespace Masterloop.Tools.Net
 
         public string UploadString(string url, string body)
         {
-            HttpWebRequest request = WebRequest.CreateHttp(url);
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(url);
             if (this.Username != null && this.Password != null)
             {
                 request.Credentials = new NetworkCredential(this.Username, this.Password);
